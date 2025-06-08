@@ -1,14 +1,24 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>ToolBox</title>
     <script src="https://unpkg.com/htmx.org"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Hello world</h1>
-</body>
-
+    <select
+      name="feature"
+      hx-trigger="load,change"
+      hx-get="/feature"
+      hx-swap="innerHMTL"
+      hx-target="#feature-page"
+    >
+      {% for f in features %}
+      <option value="{{loop.index0}}">{{ f.name }}</option>
+      {% endfor %}
+    </select>
+    <div id="feature-page"></div>
+  </body>
 </html>
