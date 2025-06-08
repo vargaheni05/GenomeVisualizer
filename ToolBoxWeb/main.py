@@ -1,9 +1,12 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from pathlib import Path
+
+HERE = Path(__file__).parent
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=HERE / "templates")
 
 
 @app.get("/", response_class=HTMLResponse)
