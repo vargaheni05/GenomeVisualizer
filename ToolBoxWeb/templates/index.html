@@ -8,6 +8,9 @@
 
   <body>
     <h1>Hello world</h1>
+    <label for="feature">
+        Feature
+    </label>
     <select
       name="feature"
       hx-trigger="load,change"
@@ -20,5 +23,6 @@
       {% endfor %}
     </select>
     <div id="feature-page"></div>
+    <div id="feature-result"></div>
   </body>
 </html>
