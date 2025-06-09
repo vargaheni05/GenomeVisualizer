@@ -148,7 +148,7 @@ def FasterSymbolArray(Genome: str, symbol: str) -> dict[int, int]:
     ExtendedGenome = Genome + Genome[0:n//2]
 
     # look at the first half of Genome to compute first array value
-    array[0] = PatternCount(symbol, Genome[0:n//2])
+    array[0] = PatternCount(Genome[0:n//2], symbol)
 
     for i in range(1, n):
         # start by setting the current array value equal to the previous array value
