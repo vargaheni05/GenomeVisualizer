@@ -20,6 +20,7 @@ classifiers = [
 dependencies = [
 "matplotlib>=3.9.2"
 ]
+dependencies = ["numpy>=1.25.2", "matplotlib>=3.6.2"]
 [project.urls]
 Homepage = "https://github.com/vargaheni05/GenomeVisualizer"
 Documentation = "https://GenomeVisualizer.readthedocs.io/en/latest/"
