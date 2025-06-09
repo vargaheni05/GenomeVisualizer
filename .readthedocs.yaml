@@ -16,7 +16,7 @@ python:
   install:
   # What to install
     - requirements: docs/requirements.txt # Requirements for building your docs
-    - requirements: requirements.txt # Requirements for using your package
+    - requirements: ToolBox/requirements.txt # Requirements for using your package
     # Your dependencies. You can provide multiple ones:
     # one for building the docs, one for just installing your package
     - method: pip
