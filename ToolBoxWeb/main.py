@@ -1,5 +1,6 @@
 import io
 import logging
+import string
 import pathlib
 from typing import Any
 from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request, Response
@@ -43,7 +44,10 @@ class Tool(BaseModel):
     template: str
 
 
-features: list[Tool] = [Tool(name="Pr", template="pr.html")]
+features: list[Tool] = [
+    Tool(name="Pr", template="pr.html"),
+    Tool(name="Reverse Complement", template="reverse_complement.html"),
+]
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -121,3 +125,28 @@ def image_response_test(bg: BackgroundTasks):
     fig = plt.figure()
     plt.plot([1, 2, 3], [1, 5, 2])
     return make_image_response(fig, bg)
+
+
+class ReverseComplementInput(BaseModel):
+    pattern: str
+
+    @field_validator("pattern")
+    def text_has_appropriate_alphabet(cls, v: str):
+        if not v:
+            raise ValueError("`pattern` can't be empty")
+        v = v.upper()
+        letters = set(c for c in v if c not in string.whitespace)
+        extra_chars = letters - {"A", "T", "C", "G"}
+        if extra_chars:
+            raise ValueError(
+                f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
+            )
+        return v
+
+
+@app.post("/reverse-complement")
+def reverse_complement_page(request: Request, input: ReverseComplementInput = Form()):
+    result = GenomeVisualizer.ReverseComplement(input.pattern)
+    return templates.TemplateResponse(
+        "reverse_complement_result.html", {"request": request, "result": result}
+    )
