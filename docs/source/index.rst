@@ -28,7 +28,7 @@ Datasets
 
 Installation
 ------------
-pip project: LINK
+pip project: https://pypi.org/project/GenomeVisualizer/
 
 git repository: "https://github.com/vargaheni05/GenomeVisualizer"
 
