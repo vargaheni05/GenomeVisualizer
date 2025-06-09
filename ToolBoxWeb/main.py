@@ -2,7 +2,8 @@ import io
 import logging
 import pathlib
 from typing import Any
-from fastapi import BackgroundTasks, FastAPI, Form, Request, Response
+from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request, Response
+from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from matplotlib.figure import Figure
@@ -15,6 +16,19 @@ HERE = pathlib.Path(__file__).parent
 
 app = FastAPI()
 templates = Jinja2Templates(directory=HERE / "templates")
+
+
+@app.exception_handler(Exception)
+async def handle_exceptions(request, exc):
+    return error_page(request, repr(exc))
+
+
+@app.exception_handler(RequestValidationError)
+async def handle_http_exceptions(request, exc):
+    return error_page(
+        request,
+        "\n".join(f'Invalid input: {e['input']}: {e["msg"]}' for e in exc.errors()),
+    )
 
 
 # adding a new Feauture:
