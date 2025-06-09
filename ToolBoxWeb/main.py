@@ -1,5 +1,4 @@
 import io
-import logging
 import string
 import pathlib
 from typing import Any
@@ -45,7 +44,6 @@ class Tool(BaseModel):
 
 
 features: list[Tool] = [
-    Tool(name="Pr", template="pr.html"),
     Tool(name="Reverse Complement", template="reverse_complement.html"),
 ]
 
@@ -77,33 +75,6 @@ def feature_page(request: Request, feature: int):
             f"Feauture index {feature} out of range. Expected between {0} and {len(features)}",
         )
     return templates.TemplateResponse(selected_feature.template, {"request": request})
-
-
-class PrInput(BaseModel):
-    text: str
-    # TODO: accept profile as JSON?
-    profile: dict[str, list[Any]] = {}
-
-    @field_validator("text")
-    def text_has_appropriate_alphabet(cls, v):
-        if not v:
-            raise ValueError("`text` can't be empty")
-        return v
-
-
-@app.post("/pr", response_class=HTMLResponse)
-def pr_page(request: Request, input: PrInput = Form()):
-    try:
-        result = GenomeVisualizer.Pr(input.text, input.profile)
-    except Exception as err:
-        logging.exception("Failed to process Pr")
-        return error_page(
-            request,
-            f"Failed to process Pr of input: {repr(err)}",
-        )
-    return templates.TemplateResponse(
-        "pr_result.html", {"request": request, "result": result}
-    )
 
 
 def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
