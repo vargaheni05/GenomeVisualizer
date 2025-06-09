@@ -19,14 +19,14 @@ classifiers = [
 "Programming Language :: Python :: 3.12",
 "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
 "Operating System :: OS Independent",
-"Topic :: Scientific/Engineering :: Bioinformatics"
+"Topic :: Scientific/Engineering"
 ]
 dependencies = [
 "matplotlib>=3.9.2"
 ]
 [project.urls]
 Homepage = "https://github.com/vargaheni05/GenomeVisualizer"
-Documentation = "https://GenomeVisualizer.readthedocs.io/en/latest/"
+Documentation = "https://genomevisualizer.readthedocs.io/en/latest/"
 Repository = "https://github.com/vargaheni05/GenomeVisualizer.git"
 Issues = "https://github.com/vargaheni05/GenomeVisualizer/issues"
 [tool.setuptools]
