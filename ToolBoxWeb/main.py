@@ -1,10 +1,11 @@
 import io
-import logging
+import string
 import pathlib
 from typing import Any
 from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from matplotlib.figure import Figure
 from pydantic import BaseModel, field_validator
@@ -15,6 +16,7 @@ import matplotlib.pyplot as plt
 HERE = pathlib.Path(__file__).parent
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
 
 
@@ -27,7 +29,7 @@ async def handle_exceptions(request, exc):
 async def handle_http_exceptions(request, exc):
     return error_page(
         request,
-        "\n".join(f'Invalid input: {e['input']}: {e["msg"]}' for e in exc.errors()),
+        "\n".join(f'Invalid input: {e["msg"]}' for e in exc.errors()),
     )
 
 
@@ -37,13 +39,15 @@ async def handle_http_exceptions(request, exc):
 # - add a Feauture instance with the name to the features list
 
 
-class Feature(BaseModel):
+class Tool(BaseModel):
     name: str
     # relative path of the template file
     template: str
 
 
-features: list[Feature] = [Feature(name="Pr", template="pr.html")]
+features: list[Tool] = [
+    Tool(name="Reverse Complement", template="reverse_complement.html"),
+]
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -75,33 +79,6 @@ def feature_page(request: Request, feature: int):
     return templates.TemplateResponse(selected_feature.template, {"request": request})
 
 
-class PrInput(BaseModel):
-    text: str
-    # TODO: accept profile as JSON?
-    profile: dict[str, list[Any]] = {}
-
-    @field_validator("text")
-    def text_has_appropriate_alphabet(cls, v):
-        if not v:
-            raise ValueError("`text` can't be empty")
-        return v
-
-
-@app.post("/pr", response_class=HTMLResponse)
-def pr_page(request: Request, input: PrInput = Form()):
-    try:
-        result = GenomeVisualizer.Pr(input.text, input.profile)
-    except Exception as err:
-        logging.exception("Failed to process Pr")
-        return error_page(
-            request,
-            f"Failed to process Pr of input: {repr(err)}",
-        )
-    return templates.TemplateResponse(
-        "pr_result.html", {"request": request, "result": result}
-    )
-
-
 def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
     """
     @param bg: Image buffers are closed using BackgroundTasks so we don't leak memory
@@ -121,3 +98,28 @@ def image_response_test(bg: BackgroundTasks):
     fig = plt.figure()
     plt.plot([1, 2, 3], [1, 5, 2])
     return make_image_response(fig, bg)
+
+
+class ReverseComplementInput(BaseModel):
+    pattern: str
+
+    @field_validator("pattern")
+    def text_has_appropriate_alphabet(cls, v: str):
+        if not v:
+            raise ValueError("`pattern` can't be empty")
+        v = v.upper()
+        letters = set(c for c in v if c not in string.whitespace)
+        extra_chars = letters - {"A", "T", "C", "G"}
+        if extra_chars:
+            raise ValueError(
+                f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
+            )
+        return v
+
+
+@app.post("/reverse-complement")
+def reverse_complement_page(request: Request, input: ReverseComplementInput = Form()):
+    result = GenomeVisualizer.ReverseComplement(input.pattern)
+    return templates.TemplateResponse(
+        "reverse_complement_result.html", {"request": request, "result": result}
+    )
