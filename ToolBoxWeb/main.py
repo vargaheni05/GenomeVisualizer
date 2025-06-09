@@ -72,7 +72,7 @@ def pr_page(request: Request, input: PrInput = Form()):
         logging.exception("Failed to process Pr")
         return error_page(
             request,
-            f"Failed to process Pr of input: {err}",
+            f"Failed to process Pr of input: {repr(err)}",
         )
     return templates.TemplateResponse(
         "pr_result.html", {"request": request, "result": result}
