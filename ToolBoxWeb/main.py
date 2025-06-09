@@ -29,7 +29,7 @@ async def handle_exceptions(request, exc):
 async def handle_http_exceptions(request, exc):
     return error_page(
         request,
-        "\n".join(f'Invalid input: {e['input']}: {e["msg"]}' for e in exc.errors()),
+        "\n".join(f'Invalid input: {e["msg"]}' for e in exc.errors()),
     )
 
 
