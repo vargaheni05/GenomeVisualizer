@@ -9,19 +9,19 @@
 
   <body>
     <div class="container">
-            <label for="feature">Tool</label>
-            <select
-                name="feature"
-                hx-trigger="load,change"
-                hx-get="/feature"
-                hx-swap="innerHMTL"
-                hx-target="#feature-page"
-            >
-                {% for f in features %}
-                <option value="{{loop.index0}}">{{ f.name }}</option>
-                {% endfor %}
-            </select>
-        <div  id="feature-page"></div>
+        <label for="feature">Tool</label>
+        <select
+            name="feature"
+            hx-trigger="load,change"
+            hx-get="/feature"
+            hx-swap="innerHMTL"
+            hx-target="#feature-page"
+        >
+            {% for f in features %}
+            <option value="{{loop.index0}}">{{ f.name }}</option>
+            {% endfor %}
+        </select>
+        <div id="feature-page"></div>
     </div>
     <div class="container" id="feature-result"></div>
     <div class="container" >
