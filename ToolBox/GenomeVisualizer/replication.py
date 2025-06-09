@@ -1,4 +1,4 @@
-def PatternCount(Text, Pattern):
+def PatternCount(Text: str, Pattern: str) -> int:
     """
     Counts the number of exact occurrences of a pattern in a given DNA sequence.
 
@@ -22,7 +22,7 @@ def PatternCount(Text, Pattern):
             count = count+1
     return count
 
-def Reverse(Pattern):
+def Reverse(Pattern: str) -> str:
     """
     Reverses the given DNA pattern.
 
@@ -43,7 +43,7 @@ def Reverse(Pattern):
         rev = char + rev
     return rev
 
-def Complement(Pattern):
+def Complement(Pattern: str) -> str:
     """
     Returns the complementary DNA strand of the given pattern.
 
@@ -72,7 +72,7 @@ def Complement(Pattern):
             comp = comp + 'C'
     return comp
 
-def ReverseComplement(Pattern):
+def ReverseComplement(Pattern: str) -> str:
     """
     Computes the reverse complement of a DNA sequence.
 
@@ -93,7 +93,7 @@ def ReverseComplement(Pattern):
     Pattern = Complement(Pattern) # complement each letter in a string
     return Pattern
 
-def PatternMatching(Pattern, Genome):
+def PatternMatching(Pattern: str, Genome: str) -> list[int]:
     """
     Finds all starting positions where a given pattern appears exactly in a genome.
 
@@ -117,7 +117,7 @@ def PatternMatching(Pattern, Genome):
             positions.append(i)
     return positions
 
-def FasterSymbolArray(Genome, symbol):
+def FasterSymbolArray(Genome: str, symbol: str) -> dict[int, int]:
     """
     Efficiently computes the symbol frequency array over a sliding window of size n/2.
 
@@ -161,7 +161,7 @@ def FasterSymbolArray(Genome, symbol):
             array[i] = array[i]+1
     return array
 
-def SkewArray(Genome):
+def SkewArray(Genome: str) -> list[int]:
     """
     Computes the skew array of a DNA genome.
 
@@ -193,7 +193,7 @@ def SkewArray(Genome):
             skew.append(skew[-1])
     return skew
 
-def MinimumSkew(Genome):
+def MinimumSkew(Genome: str) -> list[int]:
     """
     Identifies all positions in the genome where the skew array reaches its minimum value.
 
@@ -219,7 +219,7 @@ def MinimumSkew(Genome):
             positions.append(i)
     return positions
 
-def HammingDistance(p, q):
+def HammingDistance(p: str, q: str) -> int:
     """
     Computes the Hamming distance between two DNA strings.
 
@@ -249,7 +249,7 @@ def HammingDistance(p, q):
             count+=1
     return count
 
-def ApproximatePatternMatching(Text, Pattern, d):
+def ApproximatePatternMatching(Text: str, Pattern: str, d: int) -> list[int]:
     """
     Finds all starting positions where a pattern appears in a text with at most d mismatches.
 
@@ -276,7 +276,7 @@ def ApproximatePatternMatching(Text, Pattern, d):
             positions.append(i)
     return positions
 
-def ApproximatePatternCount(Pattern, Text, d):
+def ApproximatePatternCount(Pattern: str, Text: str, d: int) -> int:
     """
     Counts the number of times a pattern appears in a text with at most d mismatches.
 

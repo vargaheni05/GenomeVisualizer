@@ -8,7 +8,7 @@ except PackageNotFoundError:
 from .basic import load_genome_from_txt, FrequencyMap, FrequentWords
 from .motifs import Count, Profile, Consensus, Score, Pr, ProfileMostProbableKmer, GreedyMotifSearch, CountWithPseudocounts, ProfileWithPseudocounts, GreedyMotifSearchWithPseudocounts, Motifs, RandomMotifs, RandomizedMotifSearch, Normalize, WeightedDie, ProfileGeneratedString, GibbsSampler
 from .replication import PatternCount, Reverse, Complement, ReverseComplement, PatternMatching, FasterSymbolArray, SkewArray, MinimumSkew, HammingDistance, ApproximatePatternMatching, ApproximatePatternCount
-from .visualization import plot_symbol_array
+from .visualization import plot_symbol_array, plot_skew_array_with_ori
 
 __all__ = [
     # Basic
@@ -24,7 +24,7 @@ __all__ = [
     "PatternMatching", "FasterSymbolArray", "SkewArray", "MinimumSkew",
     "HammingDistance", "ApproximatePatternMatching", "ApproximatePatternCount",
     # Visualization
-    "plot_symbol_array",
+    "plot_symbol_array", "plot_skew_array_with_ori",
     # Meta
     "__version__",
 ]

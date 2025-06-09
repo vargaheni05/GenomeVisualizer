@@ -10,22 +10,22 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 # !TODO: Change these settings
 setup(
-    name="example_package", # Name of the package
-    version="0.0",
-    description="An example package",
-    author="Kristóf Müller, You",
-    author_email="muller.kristof@itk.ppke.hu, you@email.com",
+    name="GenomeVisualizer", # Name of the package
+    version="0.0.1",
+    description="Toolbox for Detecting DNA Replication Origins and Regulatory Motifs in Genomic Sequences",
+    author="Varga Henrietta",
+    author_email="varga.henrietta.julianna@hallgato.ppke.hu",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="http://your-git.com",
-    project_urls={"Bug Tracker": "http://your-git.com/issues",},
+    url="https://github.com/vargaheni05/GenomeVisualizer",
+    project_urls={"Bug Tracker": "https://github.com/vargaheni05/GenomeVisualizer/issues",},
     classifiers=[
         "Development Status :: 1 - Planning",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.12",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
     ],
-    packages=["example_package"], # Name of the package directory
+    packages=["GenomeVisualizer"], # Name of the package directory
     install_requires=[require],
     python_requires=">=3.10"
 )

@@ -1,5 +1,3 @@
-from typing import Dict, List
-
 def load_genome_from_txt(filepath: str) -> str:
     """
     Loads a genome sequence from a plain text (.txt) file.
@@ -32,7 +30,7 @@ def load_genome_from_txt(filepath: str) -> str:
 
     return content
 
-def FrequencyMap(Text: str, k: int) -> Dict[str, int]:
+def FrequencyMap(Text: str, k: int) -> dict[str, int]:
     """
     Computes the frequency of all k-length substrings (k-mers) in a DNA sequence.
 
@@ -61,7 +59,7 @@ def FrequencyMap(Text: str, k: int) -> Dict[str, int]:
         freq[Pattern] += 1
     return freq
 
-def FrequentWords(Text: str, k: int) -> List[str]:
+def FrequentWords(Text: str, k: int) -> list[str]:
     """
     Identifies the most frequent k-length substrings (k-mers) in a DNA sequence.
 
