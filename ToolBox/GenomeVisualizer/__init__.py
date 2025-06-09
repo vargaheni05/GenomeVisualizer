@@ -5,11 +5,14 @@ try:
 except PackageNotFoundError:
     __version__ = "0.0.1"
 
+from .basic import load_genome_from_txt, FrequencyMap, FrequentWords
 from .motifs import Count, Profile, Consensus, Score, Pr, ProfileMostProbableKmer, GreedyMotifSearch, CountWithPseudocounts, ProfileWithPseudocounts, GreedyMotifSearchWithPseudocounts, Motifs, RandomMotifs, RandomizedMotifSearch, Normalize, WeightedDie, ProfileGeneratedString, GibbsSampler
-from .replication import PatternCount, Reverse, Complement, ReverseComplement, PatternMatching, FasterSymbolArray, SkewArray, MinimumSkew, HammingDistance, ApproximatePatternMatching, ApproximatePatternCount, FrequencyMap, FrequentWords
-#from .visualization import 
+from .replication import PatternCount, Reverse, Complement, ReverseComplement, PatternMatching, FasterSymbolArray, SkewArray, MinimumSkew, HammingDistance, ApproximatePatternMatching, ApproximatePatternCount
+from .visualization import plot_symbol_array
 
 __all__ = [
+    # Basic
+    "FrequencyMap", "FrequentWords","load_genome_from_txt",
     # Motifs
     "Count", "Profile", "Consensus", "Score", "Pr", "ProfileMostProbableKmer",
     "GreedyMotifSearch", "CountWithPseudocounts", "ProfileWithPseudocounts",
@@ -20,9 +23,8 @@ __all__ = [
     "PatternCount", "Reverse", "Complement", "ReverseComplement",
     "PatternMatching", "FasterSymbolArray", "SkewArray", "MinimumSkew",
     "HammingDistance", "ApproximatePatternMatching", "ApproximatePatternCount",
-    "FrequencyMap", "FrequentWords",
     # Visualization
-
+    "plot_symbol_array",
     # Meta
     "__version__",
 ]
