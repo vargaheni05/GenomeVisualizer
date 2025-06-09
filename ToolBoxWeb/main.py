@@ -1,8 +1,7 @@
 import logging
 import pathlib
-from shutil import ExecError
 from typing import Any
-from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
