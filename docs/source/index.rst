@@ -30,10 +30,10 @@ Installation
 ------------
 pip project: https://pypi.org/project/GenomeVisualizer/
 
-git repository: "https://github.com/vargaheni05/GenomeVisualizer"
+git repository: https://github.com/vargaheni05/GenomeVisualizer
 
 For comprehensive installation instructions and usage guidelines, please refer to the documentation:  
-LINK
+https://genomevisualizer.readthedocs.io/en/latest/usage.html
 
 Requirements
 ------------
