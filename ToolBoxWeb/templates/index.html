@@ -3,24 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <title>ToolBox</title>
+    <link rel="stylesheet" href="/static/styles.css" />
     <script src="https://unpkg.com/htmx.org"></script>
   </head>
 
   <body>
-    <label for="feature">Tool</label>
-    <select
-      name="feature"
-      hx-trigger="load,change"
-      hx-get="/feature"
-      hx-swap="innerHMTL"
-      hx-target="#feature-page"
-    >
-      {% for f in features %}
-      <option value="{{loop.index0}}">{{ f.name }}</option>
-      {% endfor %}
-    </select>
-    <div id="feature-page"></div>
-    <div id="feature-result"></div>
-    <image src="/test-image" />
+    <div class="container">
+            <label for="feature">Tool</label>
+            <select
+                name="feature"
+                hx-trigger="load,change"
+                hx-get="/feature"
+                hx-swap="innerHMTL"
+                hx-target="#feature-page"
+            >
+                {% for f in features %}
+                <option value="{{loop.index0}}">{{ f.name }}</option>
+                {% endfor %}
+            </select>
+        <div  id="feature-page"></div>
+    </div>
+    <div class="container" id="feature-result"></div>
+    <div class="container" >
+        <image src="/test-image" />
+    </div>
   </body>
 </html>

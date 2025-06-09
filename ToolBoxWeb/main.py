@@ -5,6 +5,7 @@ from typing import Any
 from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from matplotlib.figure import Figure
 from pydantic import BaseModel, field_validator
@@ -15,6 +16,7 @@ import matplotlib.pyplot as plt
 HERE = pathlib.Path(__file__).parent
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
 
 
