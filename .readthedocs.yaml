@@ -5,7 +5,7 @@ build:
   os: ubuntu-22.04
   # Docker image used to build (don't worry about it)
   tools:
-    python: "3.10"
+    python: "3.12"
     # Python version
 
 sphinx:
@@ -20,5 +20,5 @@ python:
     # Your dependencies. You can provide multiple ones:
     # one for building the docs, one for just installing your package
     - method: pip
-      path: .
+      path: ToolBox
       # Install your package using `pip .` before building the docs
