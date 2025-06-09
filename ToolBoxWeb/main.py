@@ -1,12 +1,14 @@
+import io
 import logging
 import pathlib
-from shutil import ExecError
 from typing import Any
-from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi import BackgroundTasks, FastAPI, Form, Request, Response
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
+from matplotlib.figure import Figure
 from pydantic import BaseModel
 import GenomeVisualizer
+import matplotlib.pyplot as plt
 
 
 HERE = pathlib.Path(__file__).parent
@@ -73,8 +75,29 @@ def pr_page(request: Request, input: PrInput = Form()):
         logging.exception("Failed to process Pr")
         return error_page(
             request,
-            f"Failed to process Pr of input: {err}",
+            f"Failed to process Pr of input: {repr(err)}",
         )
     return templates.TemplateResponse(
         "pr_result.html", {"request": request, "result": result}
     )
+
+
+def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
+    """
+    @param bg: Image buffers are closed using BackgroundTasks so we don't leak memory
+    """
+    img_buf = io.BytesIO()
+    figure.savefig(img_buf, format="png")
+    bg.add_task(img_buf.close)
+    return Response(
+        img_buf.getvalue(),
+        headers={"Content-Disposition": f'inline; filename="{fname}"'},
+        media_type="image/png",
+    )
+
+
+@app.get("/test-image")
+def image_response_test(bg: BackgroundTasks):
+    fig = plt.figure()
+    plt.plot([1, 2, 3], [1, 5, 2])
+    return make_image_response(fig, bg)
