@@ -37,13 +37,13 @@ async def handle_http_exceptions(request, exc):
 # - add a Feauture instance with the name to the features list
 
 
-class Feature(BaseModel):
+class Tool(BaseModel):
     name: str
     # relative path of the template file
     template: str
 
 
-features: list[Feature] = [Feature(name="Pr", template="pr.html")]
+features: list[Tool] = [Tool(name="Pr", template="pr.html")]
 
 
 @app.get("/", response_class=HTMLResponse)
