@@ -4,8 +4,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "GenomeVisualizer"
 version = "0.0.1"
-authors = [{ name="Varga Henrietta"}]
-maintainers = [{ name="Varga Henrietta", email = "varga.henrietta.julianna@hallgato.ppke.hu"}]
+authors = [
+    { name = "Varga Henrietta" }
+]
+maintainers = [
+    { name = "Varga Henrietta", email = "varga.henrietta.julianna@hallgato.ppke.hu" }
+]
 description = "A toolbox for detecting DNA replication origins and regulatory motifs in genomic sequences"
 readme = {file = "README.md", content-type = "text/markdown"}
 license-files = ["LICENSE"]
