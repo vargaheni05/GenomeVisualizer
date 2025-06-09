@@ -1,69 +1,81 @@
-# Example package
-This is an example package with some dummy functions for use with the Scientific Python course (PPCU 2025)
+# GenomeVisualizer - A toolbox for detecting DNA replication origins and regulatory motifs in genomic sequences
 
-> [!CAUTION]
-> Please configure everything! This is just an example
+A toolbox for detecting DNA replication origins and regulatory motifs in genomic sequences.
+The toolbox includes modules for skew analysis, origin prediction, motif search, and graphical genome representation.
 
-## After writing your code
+---
 
-* Define your requirements
-* Configure the `setup.py` and `pyproject.toml`
-* Create `docs` with Sphinx
-* Change the `LICENCE` if applicable
-* Configure ReadTheDocs using `.readthedocs.yaml`
-* Set up ReadTheDocs for your package
-* Build, test, improve...
-* Enjoy! 😎
+### Current Version: `0.0.1`  
+### Planned Release: June 2025  
 
-## Building the package:
-Editable mode install:
-```console
-pip install -e .
+---
+
+## Introduction  
+
+`GenomeVisualizer` was developed to support students, researchers, and enthusiasts in exploring the structure of prokaryotic genomes.  
+It provides tools to identify biologically significant regions such as replication origins (ori) and sequence motifs associated with regulatory processes like circadian rhythms.
+
+---
+
+## Description  
+
+The toolbox is divided into the following modules:
+
+- **Basic:**  
+  - Simple pattern counting, frequency mapping, and file loading utilities.
+
+- **Replication:**  
+  - Tools to locate replication origin using GC-skew, Hamming distance, and approximate pattern matching.
+
+- **Motifs:**  
+  - Motif search algorithms including Greedy Motif Search and Gibbs Sampling.
+
+- **Visualization:**  
+  - Genome-wide plots for skew array, symbol distribution, and motif locations using matplotlib.
+
+---
+
+**For more information, visit the [official documentation](https://genomevisualizer.readthedocs.io/en/latest/)**.
+
+
+## Installation
+### From PyPi
+Install `GenomeVisualizer` using pip
+
 ```
-Install build:
-```console
-pip install build
-```
-Building the package:
-```console
-python -m build
-```
-This will create a `dist` directory with a source tarball and wheel file. These will be used to install your package.
-
-## Documentation
-### Creating and building the documentation:
-Install Sphinx:
-```console
-pip install sphinx
-```
-Run "quickstart" and follow the prompts:
-```console
-sphinx-quickstart docs
-```
-Configure Sphinx in `conf.py`
-
-Recommended extensions:
-* `sphinx.ext.autodoc`
-* `sphinx.ext.napoleon`
-* `sphinx.ext.viewcode`
-
-Recommended html theme: `sphinx_rtd_theme`
-
-```console
-pip install sphinx-rtd-theme
+pip install GenomeVisualizer
 ```
 
-### Build documentation as local html:
-Windows:
-```console
-./docs/make.bat html
+### From source
+Clone the git repository
 ```
-Linux/Max:
-```console
-cd ./docs
-make html
+git clone "https://github.com/vargaheni05/GenomeVisualizer.git"
 ```
-Manually:
-```console
-sphinx-build -M html <DOCS-SOURCE-PATH> <DOCS-BUILD-OUTPUT-PATH>
+Change directory to the cloned repository
 ```
+cd GenomeVisualizer/Toolbox
+```
+Install with pip
+```
+pip install .
+```
+
+## Building the documentation
+Install required packages
+```
+pip install -r docs/requirements.txt
+```
+Call Sphinx build command
+```
+sphinx-build -M html docs/source docs/build
+```
+On Windows you can also run the `make.bat` file
+```
+.\docs\make.bat html
+```
+
+The documentation should be available in the `docs/build` directory as html files<br>
+This includes the example codes as tutorials
+
+## Correspondence
+Henrietta Varga (varga.henrietta.julianna@hallgato.ppke.hu)
