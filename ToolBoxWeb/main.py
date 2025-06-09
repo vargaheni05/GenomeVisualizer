@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from matplotlib.figure import Figure
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 import GenomeVisualizer
 import matplotlib.pyplot as plt
 
@@ -79,6 +79,12 @@ class PrInput(BaseModel):
     text: str
     # TODO: accept profile as JSON?
     profile: dict[str, list[Any]] = {}
+
+    @field_validator("text")
+    def text_has_appropriate_alphabet(cls, v):
+        if not v:
+            raise ValueError("`text` can't be empty")
+        return v
 
 
 @app.post("/pr", response_class=HTMLResponse)
