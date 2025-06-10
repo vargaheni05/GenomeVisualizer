@@ -1,19 +1,9 @@
 <h1>Skew</h1>
 <form hx-trigger="change,submit" hx-post="/skew" hx-swap="innerHMTL" hx-target="#feature-result"
     enctype="multipart/form-data">
-    <div x-data="{ fileInput: false }">
-        <div class="filetoggle">
-            <label for="fileInput">Use file input</label>
-            <input type="checkbox" class="switch" x-model="fileInput" name="isFileInput" />
-        </div>
-        <label for="genome">Genome</label>
-        <template x-if="!fileInput">
-            <textarea name="genome" type="text" placeholder="AATCG"></textarea>
-        </template>
-        <template x-if="fileInput">
-            <input type="file" name="genome" />
-        </template>
-    </div>
+    {% with label="Genome", name="genome" %}
+    {% include 'genome_input.html' %}
+    {% endwith %}
     <select name="symbol">
         <option>A</option>
         <option>T</option>

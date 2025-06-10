@@ -1,0 +1,13 @@
+<div x-data="{ fileInput: false }">
+    <div class="filetoggle">
+        <label for="fileInput">Use file input</label>
+        <input type="checkbox" class="switch" x-model="fileInput" name="isFileInput" />
+    </div>
+    <label for="{{name}}">{{label}}</label>
+    <template x-if="!fileInput">
+        <textarea name="{{name}}" type="text" placeholder="AATCG"></textarea>
+    </template>
+    <template x-if="fileInput">
+        <input type="file" name="{{name}}" />
+    </template>
+</div>
