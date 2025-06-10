@@ -164,8 +164,9 @@ class SkewInput(BaseModel):
 def ensure_genome(v) -> str:
     if not v:
         raise ValueError("`pattern` can't be empty")
-    v = v.upper()
-    letters = set(c for c in v if c not in string.whitespace)
+    # remove all whitespace
+    v = "".join(v.split()).upper()
+    letters = set(v)
     extra_chars = letters - {"A", "T", "C", "G"}
     if extra_chars:
         raise ValueError(
