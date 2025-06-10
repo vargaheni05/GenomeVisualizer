@@ -212,3 +212,9 @@ select:focus {
     max-height: 50vh;
     overflow: auto;
 }
+
+.filetoggle {
+    display: flex;
+    align-items: flex-start;
+    columns: 2;
+}
