@@ -89,23 +89,8 @@ def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_l
     fig=plot_skew_array_with_ori_impl(skew, ori_positions,  "genome")
     fig.show()
 
-def plot_motiflogo(motifs: list[str]) -> None:
-    """
-    Plots a motif logo based on information content using Shannon entropy.
-
-    This function generates a sequence logo from a list of motifs, where each letter's 
-    height is proportional to its information content in bits. Highly conserved positions 
-    produce taller symbols.
-
-    Args:
-        motifs (list[str]): A list of DNA strings (motifs) of equal length.
-
-    Returns:
-        None: Displays a motif logo plot using matplotlib.
-
-    Example:
-        >>> plot_motiflogo(["ATG", "ACG", "AAG", "AGG", "ATG"])
-    """
+def plot_motiflogo_impl(motifs: list[str]):
+    """see plot_motiflogo"""
     profile = Profile(motifs)
     k = len(motifs[0])
 
@@ -130,7 +115,7 @@ def plot_motiflogo(motifs: list[str]) -> None:
     df = pd.DataFrame(bit_matrix)
 
     # Plot motif logo
-    plt.figure(figsize=(1 + k * 0.4, 2.5))
+    fig = plt.figure(figsize=(1 + k * 0.4, 2.5))
     logo = logomaker.Logo(df, color_scheme='classic', font_name='Arial Rounded MT Bold')
     logo.style_spines(visible=False)
     logo.style_spines(spines=['left', 'bottom'], visible=True)
@@ -139,4 +124,24 @@ def plot_motiflogo(motifs: list[str]) -> None:
     logo.ax.set_title("Motif Logo", fontsize=16)
     logo.ax.set_xticks(list(range(k)))
     plt.tight_layout()
+    return fig
+
+def plot_motiflogo(motifs: list[str]) -> None:
+    """
+    Plots a motif logo based on information content using Shannon entropy.
+
+    This function generates a sequence logo from a list of motifs, where each letter's 
+    height is proportional to its information content in bits. Highly conserved positions 
+    produce taller symbols.
+
+    Args:
+        motifs (list[str]): A list of DNA strings (motifs) of equal length.
+
+    Returns:
+        None: Displays a motif logo plot using matplotlib.
+
+    Example:
+        >>> plot_motiflogo(["ATG", "ACG", "AAG", "AGG", "ATG"])
+    """
+    plot_motiflogo_impl(motifs)
     plt.show()

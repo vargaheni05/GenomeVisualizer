@@ -64,6 +64,7 @@ features: list[Tool] = [
     Tool(name="Reverse Complement", template="reverse_complement.html"),
     Tool(name="Skew", template="skew.html"),
     Tool(name="Symbol", template="symbol.html"),
+    Tool(name="Motif Logo", template="motif_logo.html"),
 ]
 
 
@@ -237,5 +238,34 @@ async def symbol_page(request: Request, input: Annotated[SymbolInput, Form()]):
         {
             "request": request,
             "symbol_array_img": symbol_array_img,
+        },
+    )
+
+
+@app.post("/motif-logo")
+async def motif_page(request: Request, input: Annotated[GenomeInput, Form()]):
+    genome = input.pattern
+    if not isinstance(genome, str):
+        genome = (await genome.read()).decode()
+        genome = ensure_genome(genome)
+
+    fig: Figure = GenomeVisualizer.visualization.plot_motiflogo_impl(
+        genome.splitlines()
+    )
+
+    label = ""
+    if not isinstance(input.pattern, str):
+        label, _ = os.path.splitext(input.pattern.filename)
+    with tempfile.NamedTemporaryFile(
+        suffix=".png", delete=False, delete_on_close=False
+    ) as f:
+        fname = f.name
+        fig.savefig(f, format="png")
+
+    return templates.TemplateResponse(
+        "motif_logo_result.html",
+        {
+            "request": request,
+            "fname": fname,
         },
     )
