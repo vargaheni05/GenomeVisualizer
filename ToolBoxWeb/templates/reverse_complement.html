@@ -1,5 +1,5 @@
 <h1>Reverse Complement</h1>
-<form hx-trigger="change,submit" hx-post="/reverse-complement" hx-swap="innerHMTL" hx-target="#feature-result">
+<form hx-trigger="change,submit" hx-post="/reverse-complement" hx-swap="innerHMTL" hx-target="#feature-result" enctype="multipart/form-data">
     {% with label="Pattern", name="pattern" %}
     {% include 'genome_input.html' %}
     {% endwith %}
