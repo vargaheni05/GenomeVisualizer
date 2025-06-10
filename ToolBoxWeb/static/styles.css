@@ -24,7 +24,15 @@ body {
 .container {
     max-width: 960px;
     margin: 0 auto;
+    margin-top: 2rem;
     padding: 2rem 1rem;
+    background-color: white;
+    opacity: 0.965;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    /* gray-200 */
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* Header */
@@ -59,16 +67,6 @@ nav a:hover {
 /* Main Content */
 main {
     margin-top: 2rem;
-}
-
-/* Form */
-form {
-    background-color: white;
-    padding: 1.5rem;
-    border: 1px solid #e5e7eb;
-    /* gray-200 */
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 form label {
@@ -262,4 +260,19 @@ img .responsive-img {
     height: auto;
     display: block;
     object-fit: contain;
+}
+
+.fullscreen-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/static/tfRLSPqG.jpg");
+    /* your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    /* push behind everything else */
 }

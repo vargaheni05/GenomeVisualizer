@@ -1,6 +1,7 @@
 FROM python:3.13-slim
 
 WORKDIR /toolbox
+RUN apt-get install -y ttf-mscorefonts-installer
 RUN pip install gunicorn
 
 COPY . .
