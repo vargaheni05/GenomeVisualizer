@@ -1,4 +1,5 @@
 import io
+import json
 import string
 import pathlib
 from typing import Any
@@ -29,7 +30,10 @@ async def handle_exceptions(request, exc):
 async def handle_http_exceptions(request, exc):
     return error_page(
         request,
-        "\n".join(f'Invalid input: {e["msg"]}' for e in exc.errors()),
+        "\n".join(
+            f'Invalid input ({'.'.join(e['loc'][1:])}): {e["msg"]}'
+            for e in exc.errors()
+        ),
     )
 
 
@@ -47,6 +51,7 @@ class Tool(BaseModel):
 
 features: list[Tool] = [
     Tool(name="Reverse Complement", template="reverse_complement.html"),
+    Tool(name="Skew", template="skew.html"),
 ]
 
 
@@ -122,4 +127,48 @@ def reverse_complement_page(request: Request, input: ReverseComplementInput = Fo
     result = GenomeVisualizer.ReverseComplement(input.pattern)
     return templates.TemplateResponse(
         "reverse_complement_result.html", {"request": request, "result": result}
+    )
+
+
+class SkewInput(BaseModel):
+    genome: str
+    symbol: str
+
+    @field_validator("symbol")
+    def symbol_is_valid(cls, v: str):
+        if len(v) != 1:
+            raise ValueError('`symbol` must be one of {"A", "T", "C", "G"}')
+        v = v.upper()
+        if v not in {"A", "T", "C", "G"}:
+            raise ValueError('`symbol` must be one of {"A", "T", "C", "G"}')
+        return v
+
+    @field_validator("genome")
+    def text_has_appropriate_alphabet(cls, v: str):
+        if not v:
+            raise ValueError("`pattern` can't be empty")
+        v = v.upper()
+        letters = set(c for c in v if c not in string.whitespace)
+        extra_chars = letters - {"A", "T", "C", "G"}
+        if extra_chars:
+            raise ValueError(
+                f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
+            )
+        return v
+
+
+@app.post("/skew")
+def skew_page(request: Request, input: SkewInput = Form()):
+    symbol_array = GenomeVisualizer.FasterSymbolArray(input.genome, input.symbol)
+    skew_array = GenomeVisualizer.SkewArray(input.genome)
+    min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
+
+    return templates.TemplateResponse(
+        "skew_result.html",
+        {
+            "request": request,
+            "symbol_array": json.dumps(symbol_array, indent=4),
+            "skew_array": json.dumps(skew_array, indent=4),
+            "min_skew": json.dumps(min_skew, indent=4),
+        },
     )
