@@ -5,7 +5,7 @@ The toolbox includes modules for skew analysis, origin prediction, motif search,
 
 ---
 
-### Current Version: `0.0.1`  
+### Current Version: `0.0.2`  
 ### Planned Release: June 2025  
 
 ---
@@ -28,7 +28,7 @@ The toolbox is divided into the following modules:
   - Tools to locate replication origin using GC-skew, Hamming distance, and approximate pattern matching.
 
 - **Motifs:**  
-  - Motif search algorithms including Greedy Motif Search and Gibbs Sampling.
+  - Motif search algorithms including Greedy Motif Search, Randomized Motif Search and Gibbs Sampling.
 
 - **Visualization:**  
   - Genome-wide plots for skew array, symbol distribution, and motif locations using matplotlib.

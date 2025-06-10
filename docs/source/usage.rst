@@ -37,4 +37,4 @@ For validating the installation, check the version of the toolbox:
 
     >>> import GenomeVisualizer
     >>> print(GenomeVisualizer.__version__)
-    '0.0.1'
+    '0.0.2'

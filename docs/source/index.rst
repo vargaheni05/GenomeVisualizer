@@ -4,14 +4,14 @@ Welcome to GenomeVisualizer's documentation!
 A toolbox for detecting DNA replication origins and regulatory motifs in genomic sequences.
 The toolbox includes modules for skew analysis, origin prediction, motif search, and graphical genome representation.
 
-Current version: 0.0.1
+Current version: 0.0.2
 
 Planned release: June 2025
 
 Introduction
 ------------
 GenomeVisualizer was developed to support students, researchers, and enthusiasts in exploring the structure of prokaryotic genomes.  
-It provides tools to identify biologically significant regions such as replication origins (ori) and sequence motifs associated with regulatory processes like circadian rhythms.
+It provides tools to identify biologically significant regions such as replication origins (ori) and sequence motifs associated with regulatory processes.
 
 Description
 -----------
@@ -19,12 +19,15 @@ The toolbox is divided into the following modules:
 
 - **Basic:** Simple pattern counting, frequency mapping, and file loading utilities.
 - **Replication:** Tools to locate replication origin using GC-skew, Hamming distance, and approximate pattern matching.
-- **Motifs:** Motif search algorithms including Greedy Motif Search and Gibbs Sampling.
+- **Motifs:** Motif search algorithms including Greedy Motif Search, Randomized Motif Search and Gibbs Sampling.
 - **Visualization:** Genome-wide plots for skew array, symbol distribution, and motif locations using matplotlib.
 
-Datasets
---------
+Web Tools
+---------
+We have also developed a small set of interactive web-based tools for genome analysis, you can try them here:
+**https://genomevisualizer.fly.dev/**
 
+These tools offer a simplified UI for experimenting with the core functionalities of the GenomeVisualizer package — directly in your browser.
 
 Installation
 ------------
@@ -75,6 +78,6 @@ https://genomevisualizer.readthedocs.io/en/latest/
 
 Correspondence
 --------------
-Henrietta Varga PPCU-ITK, Budapest, Hungary
+Henrietta Varga
 
 varga.henrietta.julianna@hallgato.ppke.hu
