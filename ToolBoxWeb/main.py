@@ -243,15 +243,14 @@ async def symbol_page(request: Request, input: Annotated[SymbolInput, Form()]):
 
 
 @app.post("/motif-logo")
-async def motif_page(request: Request, input: Annotated[GenomeInput, Form()]):
+async def motif_logo_page(request: Request, input: Annotated[GenomeInput, Form()]):
     genome = input.pattern
     if not isinstance(genome, str):
         genome = (await genome.read()).decode()
         genome = ensure_genome(genome)
 
     fig: Figure = GenomeVisualizer.visualization.plot_motiflogo_impl(
-        genome.splitlines(),
-        font_name="BitstromWera"
+        [l for l in genome.splitlines()], font_name="BitstromWera"
     )
 
     label = ""
