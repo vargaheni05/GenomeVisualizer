@@ -1,7 +1,15 @@
 FROM python:3.13-slim
 
 WORKDIR /toolbox
-RUN apt-get install -y ttf-mscorefonts-installer
+
+# install fonts for the logo
+RUN apt-get update
+RUN apt-get install -y git &&  \
+    git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git && \
+    cd nerd-fonts && \
+    ./install.sh BigBlueTerminal && \
+    cd .. && rm -rf nerd-fonts
+
 RUN pip install gunicorn
 
 COPY . .
