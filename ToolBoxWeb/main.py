@@ -192,7 +192,6 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
         genome = (await genome.read()).decode()
         genome = ensure_genome(genome)
 
-    symbol_array = GenomeVisualizer.FasterSymbolArray(genome, input.symbol)
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
@@ -213,9 +212,6 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
         "skew_result.html",
         {
             "request": request,
-            "symbol_array": json.dumps(symbol_array, indent=4),
-            "skew_array": json.dumps(skew_array, indent=4),
-            "min_skew": json.dumps(min_skew, indent=4),
             "fname": fname,
         },
     )
