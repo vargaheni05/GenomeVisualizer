@@ -112,5 +112,6 @@ def plot_motiflogo(motifs: list[str]) -> None:
     logo.ax.set_xlabel('Position', fontsize=14)
     logo.ax.set_ylabel('Bits', fontsize=14)
     logo.ax.set_title("Motif Logo", fontsize=16)
+    logo.ax.set_xticks(list(range(k)))
     plt.tight_layout()
     plt.show()
