@@ -115,7 +115,6 @@ def plot_motiflogo_impl(motifs: list[str], font_name='Arial Rounded MT Bold'):
     df = pd.DataFrame(bit_matrix)
 
     # Plot motif logo
-    fig = plt.figure(figsize=(1 + k * 0.4, 2.5))
     logo = logomaker.Logo(df, color_scheme='classic', font_name=font_name)
     logo.style_spines(visible=False)
     logo.style_spines(spines=['left', 'bottom'], visible=True)
@@ -124,7 +123,7 @@ def plot_motiflogo_impl(motifs: list[str], font_name='Arial Rounded MT Bold'):
     logo.ax.set_title("Motif Logo", fontsize=16)
     logo.ax.set_xticks(list(range(k)))
     plt.tight_layout()
-    return fig
+    return logo.fig
 
 def plot_motiflogo(motifs: list[str]) -> None:
     """
