@@ -85,3 +85,15 @@ def FrequentWords(Text: str, k: int) -> list[str]:
         if(freq.get(key) == m):
             words.append(key)
     return words
+
+
+def MinPositions(values: list[int]) -> list[int]:
+    """
+    Given a list of numbers, return all indices in the list that contain the minimum value.
+    """
+    positions = []
+    mn = min(values)
+    for i in range(len(values)):
+        if values[i] == mn:
+            positions.append(i)
+    return positions

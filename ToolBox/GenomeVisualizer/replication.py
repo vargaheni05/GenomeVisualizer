@@ -1,3 +1,6 @@
+from .basic import MinPositions
+
+
 def PatternCount(Text: str, Pattern: str) -> int:
     """
     Counts the number of exact occurrences of a pattern in a given DNA sequence.
@@ -213,11 +216,7 @@ def MinimumSkew(Genome: str) -> list[int]:
     """
     positions = []
     skew = SkewArray(Genome)
-    mn = min(skew)
-    for i in range (len(skew)):
-        if skew[i] == mn:
-            positions.append(i)
-    return positions
+    return MinPositions(skew)
 
 def HammingDistance(p: str, q: str) -> int:
     """
