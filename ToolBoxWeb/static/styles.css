@@ -207,3 +207,14 @@ select:focus {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
     /* focus ring */
 }
+
+.skew {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+.filetoggle {
+    display: flex;
+    align-items: flex-start;
+    columns: 2;
+}

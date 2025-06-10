@@ -1,5 +1,16 @@
 <h1>Reverse Complement</h1>
 <form hx-trigger="change,submit" hx-post="/reverse-complement" hx-swap="innerHMTL" hx-target="#feature-result">
-    <label for="pattern">Pattern</label>
-    <textarea name="pattern" type="text" placeholder=""> </textarea>
+    <div x-data="{ fileInput: false }">
+        <div class="filetoggle">
+            <label for="fileInput">Use file input</label>
+            <input type="checkbox" class="switch" x-model="fileInput" name="isFileInput" />
+        </div>
+        <label for="pattern">Pattern</label>
+        <template x-if="!fileInput">
+            <textarea name="pattern" type="text" placeholder=""> </textarea>
+        </template>
+        <template x-if="fileInput">
+            <input type="file" name="pattern" />
+        </template>
+    </div>
 </form>
