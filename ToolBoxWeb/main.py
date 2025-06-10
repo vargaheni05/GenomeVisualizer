@@ -251,7 +251,7 @@ async def motif_logo_page(request: Request, input: Annotated[GenomeInput, Form()
 
     fig: Figure = GenomeVisualizer.visualization.plot_motiflogo_impl(
         [l for l in (l.strip() for l in genome.splitlines()) if l],
-        font_name="Bitstream Vera Sans Mono",
+        font_name="BitstromWera Nerd Font Mono",
     )
 
     label = ""
