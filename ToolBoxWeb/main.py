@@ -118,25 +118,24 @@ def image_response_test(bg: BackgroundTasks):
 
 
 class ReverseComplementInput(BaseModel):
-    pattern: str
+    pattern: str | UploadFile
 
     @field_validator("pattern")
-    def text_has_appropriate_alphabet(cls, v: str):
-        if not v:
-            raise ValueError("`pattern` can't be empty")
-        v = v.upper()
-        letters = set(c for c in v if c not in string.whitespace)
-        extra_chars = letters - {"A", "T", "C", "G"}
-        if extra_chars:
-            raise ValueError(
-                f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
-            )
-        return v
+    def text_has_appropriate_alphabet(cls, v):
+        if not isinstance(v, str):
+            return v
+        return ensure_genome(v)
 
 
 @app.post("/reverse-complement")
-def reverse_complement_page(request: Request, input: ReverseComplementInput = Form()):
-    result = GenomeVisualizer.ReverseComplement(input.pattern)
+async def reverse_complement_page(
+    request: Request, input: Annotated[ReverseComplementInput, Form()]
+):
+    genome = input.pattern
+    if not isinstance(genome, str):
+        genome = (await genome.read()).decode()
+        genome = ensure_genome(genome)
+    result = GenomeVisualizer.ReverseComplement(genome)
     return templates.TemplateResponse(
         "reverse_complement_result.html", {"request": request, "result": result}
     )
