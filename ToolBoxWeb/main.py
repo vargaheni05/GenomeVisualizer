@@ -1,9 +1,19 @@
 import io
 import json
+import logging
+from optparse import Option
 import string
 import pathlib
-from typing import Any
-from fastapi import BackgroundTasks, FastAPI, Form, HTTPException, Request, Response
+from typing import Annotated, Any
+from fastapi import (
+    BackgroundTasks,
+    FastAPI,
+    Form,
+    HTTPException,
+    Request,
+    Response,
+    UploadFile,
+)
 from fastapi.exceptions import RequestValidationError
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -23,11 +33,13 @@ templates = Jinja2Templates(directory=HERE / "templates")
 
 @app.exception_handler(Exception)
 async def handle_exceptions(request, exc):
+    logging.exception("Unhandled exception", exc_info=exc)
     return error_page(request, repr(exc))
 
 
 @app.exception_handler(RequestValidationError)
-async def handle_http_exceptions(request, exc):
+async def handle_request_validation_exceptions(request, exc):
+    logging.exception("Request validation failed", exc_info=exc)
     return error_page(
         request,
         "\n".join(
@@ -131,7 +143,7 @@ def reverse_complement_page(request: Request, input: ReverseComplementInput = Fo
 
 
 class SkewInput(BaseModel):
-    genome: str
+    genome: str | UploadFile
     symbol: str
 
     @field_validator("symbol")
@@ -144,23 +156,34 @@ class SkewInput(BaseModel):
         return v
 
     @field_validator("genome")
-    def text_has_appropriate_alphabet(cls, v: str):
-        if not v:
-            raise ValueError("`pattern` can't be empty")
-        v = v.upper()
-        letters = set(c for c in v if c not in string.whitespace)
-        extra_chars = letters - {"A", "T", "C", "G"}
-        if extra_chars:
-            raise ValueError(
-                f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
-            )
-        return v
+    def genome_has_appropriate_alphabet(cls, v):
+        if not isinstance(v, str):
+            return v
+        return ensure_genome(v)
+
+
+def ensure_genome(v) -> str:
+    if not v:
+        raise ValueError("`pattern` can't be empty")
+    v = v.upper()
+    letters = set(c for c in v if c not in string.whitespace)
+    extra_chars = letters - {"A", "T", "C", "G"}
+    if extra_chars:
+        raise ValueError(
+            f"Invalid characters in input: {', '.join(extra_chars)}. Only 'A', 'T', 'C', and 'G' characters are accepted."
+        )
+    return v
 
 
 @app.post("/skew")
-def skew_page(request: Request, input: SkewInput = Form()):
-    symbol_array = GenomeVisualizer.FasterSymbolArray(input.genome, input.symbol)
-    skew_array = GenomeVisualizer.SkewArray(input.genome)
+async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
+    genome = input.genome
+    if not isinstance(genome, str):
+        genome = (await genome.read()).decode()
+        genome = ensure_genome(genome)
+
+    symbol_array = GenomeVisualizer.FasterSymbolArray(genome, input.symbol)
+    skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
     return templates.TemplateResponse(

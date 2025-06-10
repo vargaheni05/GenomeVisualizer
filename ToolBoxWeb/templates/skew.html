@@ -1,7 +1,20 @@
 <h1>Skew</h1>
-<form hx-trigger="change,submit" hx-post="/skew" hx-swap="innerHMTL" hx-target="#feature-result">
+<form hx-trigger="change,submit" hx-post="/skew" hx-swap="innerHMTL" hx-target="#feature-result"
+    enctype="multipart/form-data">
     <label for="genome">Genome</label>
-    <textarea name="genome" type="text" placeholder=""> </textarea>
+    <div x-data="{ textInput: true }">
+        <template x-if="textInput">
+            <button @click="textInput ^= 1">File</button></template>
+        <template x-if="!textInput">
+            <button @click="textInput ^= 1">Text</button>
+        </template>
+        <template x-if="textInput">
+            <textarea name="genome" type="text" placeholder=""> </textarea>
+        </template>
+        <template x-if="!textInput">
+            <input type="file" name="genome" />
+        </template>
+    </div>
     <select name="symbol">
         <option>A</option>
         <option>T</option>
