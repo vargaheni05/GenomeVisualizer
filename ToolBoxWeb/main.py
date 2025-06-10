@@ -1,9 +1,11 @@
 import io
+import os
 import json
 import logging
 from optparse import Option
 import string
 import pathlib
+import tempfile
 from typing import Annotated, Any
 from fastapi import (
     BackgroundTasks,
@@ -175,6 +177,17 @@ def ensure_genome(v) -> str:
     return v
 
 
+@app.get("/skew-img")
+async def get_skew_image(request: Request, fname: str, bg: BackgroundTasks):
+    img_buf = open(fname, "rb")
+    bg.add_task(img_buf.close)
+    return Response(
+        img_buf.read(),
+        headers={"Content-Disposition": f'inline; filename="{fname}"'},
+        media_type="image/png",
+    )
+
+
 @app.post("/skew")
 async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     genome = input.genome
@@ -186,6 +199,19 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
+    # TODO: genome label from filename?
+    label = ""
+    if not isinstance(input.genome, str):
+        label, _ = os.path.splitext(input.genome.filename)
+    fig: Figure = GenomeVisualizer.visualization.plot_skew_array_with_ori_impl(
+        skew_array, min_skew, genome_label=label
+    )
+    with tempfile.NamedTemporaryFile(
+        suffix=".png", delete=False, delete_on_close=False
+    ) as f:
+        fname = f.name
+        fig.savefig(f, format="png")
+
     return templates.TemplateResponse(
         "skew_result.html",
         {
@@ -193,5 +219,6 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
             "symbol_array": json.dumps(symbol_array, indent=4),
             "skew_array": json.dumps(skew_array, indent=4),
             "min_skew": json.dumps(min_skew, indent=4),
+            "fname": fname,
         },
     )
