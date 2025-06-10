@@ -109,13 +109,6 @@ def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
     )
 
 
-@app.get("/test-image")
-def image_response_test(bg: BackgroundTasks):
-    fig = plt.figure()
-    plt.plot([1, 2, 3], [1, 5, 2])
-    return make_image_response(fig, bg)
-
-
 class ReverseComplementInput(BaseModel):
     pattern: str | UploadFile
 
