@@ -8,8 +8,8 @@ For an interactive demonstration of the GenomeVisualizer toolbox, visit the Cola
 
 .. raw:: html
 
-   <a href="" target="_blank">Colab Notebook</a>
-
+   <a href="https://colab.research.google.com/drive/1E_TdBmojMRg25IxxbsurjCOuTjo7Uaks#scrollTo=b2f2ce68" target="_blank">Colab Notebook</a>
+---------------------------
 
 Data Handling
 -------------

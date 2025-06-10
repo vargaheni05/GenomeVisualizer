@@ -25,7 +25,7 @@ The toolbox is divided into the following modules:
 Web Tools
 ---------
 We have also developed a small set of interactive web-based tools for genome analysis, you can try them here:
-**https://genomevisualizer.fly.dev/**
+https://genomevisualizer.fly.dev/
 
 These tools offer a simplified UI for experimenting with the core functionalities of the GenomeVisualizer package — directly in your browser.
 
