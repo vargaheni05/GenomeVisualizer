@@ -190,7 +190,7 @@ def ProfileMostProbableKmer(text: str, k: int, profile: dict[str, list[float]]) 
             most_probable = k_mer
     return most_probable
 
-def GreedyMotifSearch(Dna, k, t):
+def GreedyMotifSearch(Dna: list[str], k: int, t: int) -> list[str]:
     """
     Finds the best-scoring collection of motifs across multiple DNA strings using the greedy motif search algorithm.
 
@@ -244,19 +244,35 @@ def GreedyMotifSearch(Dna, k, t):
             
     return BestMotifs
 
-def CountWithPseudocounts(Motifs):
-    count = {}
-    t = len(Motifs)
-    k = len(Motifs[0])
-    for symbol in "ACGT":
-        count[symbol] = []
-        for j in range(k):
-             count[symbol].append(1)
-    for i in range(t):
-        for j in range(k):
-            symbol = Motifs[i][j]
-            count[symbol][j] += 1
-    return count
+def CountWithPseudocounts(Motifs: list[str]) -> dict[str, list[int]]:
+    """
+    Computes the count matrix of motifs with pseudocounts (Laplace’s Rule of Succession).
+
+    This function is a modified version of `Count()`, where each position in the count 
+    matrix is initialized with 1 instead of 0. This prevents zero values in subsequent 
+    profile computations and is especially useful in motif discovery algorithms to avoid 
+    assigning zero probability to unseen symbols.
+
+    Args:
+        Motifs (list[str]): AA list of DNA strings (motifs) of equal length.
+
+    Returns:
+        dict[str, list[int]]: A dictionary mapping each nucleotide ('A', 'C', 'G', 'T') 
+        to a list of integer counts per position, each initialized with 1 (pseudocount).
+
+    Example:
+        >>> CountWithPseudocounts(["ATG", "ACG", "AAG", "AGG", "ATG"])
+        {
+            'A': [6, 1, 1],
+            'C': [1, 2, 1],
+            'G': [1, 1, 6],
+            'T': [1, 5, 1]
+        }
+
+    Notes:
+        - This function adds 1 pseudocount to each nucleotide in every column (Laplace smoothing).
+        - Useful when constructing profile matrices to avoid zero probabilities.
+    """
 
 def ProfileWithPseudocounts(Motifs):
     t = len(Motifs)
