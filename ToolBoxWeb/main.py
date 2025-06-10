@@ -167,8 +167,8 @@ def ensure_genome(v) -> str:
     return v
 
 
-@app.get("/skew-img")
-async def get_skew_image(request: Request, fname: str, bg: BackgroundTasks):
+@app.get("/img")
+async def get_image(request: Request, fname: str, bg: BackgroundTasks):
     img_buf = open(fname, "rb")
     bg.add_task(img_buf.close)
     return Response(
@@ -185,6 +185,7 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
         genome = (await genome.read()).decode()
         genome = ensure_genome(genome)
 
+    symbol_array = GenomeVisualizer.FasterSymbolArray(genome, input.symbol)
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
@@ -198,13 +199,23 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     with tempfile.NamedTemporaryFile(
         suffix=".png", delete=False, delete_on_close=False
     ) as f:
-        fname = f.name
+        skew_array_img = f.name
+        fig.savefig(f, format="png")
+
+    fig: Figure = GenomeVisualizer.visualization.plot_symbol_array_impl(
+        symbol_array, input.symbol, genome_label=label
+    )
+    with tempfile.NamedTemporaryFile(
+        suffix=".png", delete=False, delete_on_close=False
+    ) as f:
+        symbol_array_img = f.name
         fig.savefig(f, format="png")
 
     return templates.TemplateResponse(
         "skew_result.html",
         {
             "request": request,
-            "fname": fname,
+            "symbol_array_img": symbol_array_img,
+            "skew_array_img": skew_array_img,
         },
     )

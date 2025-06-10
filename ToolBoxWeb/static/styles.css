@@ -209,7 +209,6 @@ select:focus {
 }
 
 .skew {
-    max-height: 50vh;
     overflow: auto;
 }
 
@@ -254,4 +253,13 @@ select:focus {
 .htmx-request.spinner-container {
     opacity: 1;
     display: flex;
+}
+
+img .responsive-img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
