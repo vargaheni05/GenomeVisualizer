@@ -9,21 +9,26 @@
   </head>
 
   <body>
-    <div class="container">
-        <label for="feature">Tool</label>
-        <select
-            name="feature"
-            hx-trigger="load,change"
-            hx-get="/feature"
-            hx-swap="innerHMTL"
-            hx-target="#feature-page"
-        >
-            {% for f in features %}
-            <option value="{{loop.index0}}">{{ f.name }}</option>
-            {% endfor %}
-        </select>
-        <div id="feature-page"></div>
+    <div hx-indicator="#loading-spinner">
+        <div class="container">
+            <label for="feature">Tool</label>
+            <select
+                name="feature"
+                hx-trigger="load,change"
+                hx-get="/feature"
+                hx-swap="innerHMTL"
+                hx-target="#feature-page"
+            >
+                {% for f in features %}
+                <option value="{{loop.index0}}">{{ f.name }}</option>
+                {% endfor %}
+            </select>
+            <div id="feature-page"></div>
+            <div id="loading-spinner" class="spinner-container">
+                <div class="spinner" role="status" aria-label="Loading"></div>
+            </div>
+        </div>
+        <div class="container" id="feature-result"></div>
     </div>
-    <div class="container" id="feature-result"></div>
   </body>
 </html>
