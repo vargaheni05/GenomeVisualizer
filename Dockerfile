@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get install -y git &&  \
     git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git && \
     cd nerd-fonts && \
-    ./install.sh BigBlueTerminal && \
+    ./install.sh BitstromWera && \
     cd .. && rm -rf nerd-fonts
 
 RUN pip install gunicorn

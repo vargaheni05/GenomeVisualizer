@@ -251,7 +251,7 @@ async def motif_page(request: Request, input: Annotated[GenomeInput, Form()]):
 
     fig: Figure = GenomeVisualizer.visualization.plot_motiflogo_impl(
         genome.splitlines(),
-        font_name="BigBlueTerminal"
+        font_name="BitstromWera"
     )
 
     label = ""
