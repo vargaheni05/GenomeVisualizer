@@ -63,6 +63,7 @@ class Tool(BaseModel):
 features: list[Tool] = [
     Tool(name="Reverse Complement", template="reverse_complement.html"),
     Tool(name="Skew", template="skew.html"),
+    Tool(name="Symbol", template="symbol.html"),
 ]
 
 
@@ -109,7 +110,7 @@ def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
     )
 
 
-class ReverseComplementInput(BaseModel):
+class GenomeInput(BaseModel):
     pattern: str | UploadFile
 
     @field_validator("pattern")
@@ -121,7 +122,7 @@ class ReverseComplementInput(BaseModel):
 
 @app.post("/reverse-complement")
 async def reverse_complement_page(
-    request: Request, input: Annotated[ReverseComplementInput, Form()]
+    request: Request, input: Annotated[GenomeInput, Form()]
 ):
     genome = input.pattern
     if not isinstance(genome, str):
@@ -133,7 +134,7 @@ async def reverse_complement_page(
     )
 
 
-class SkewInput(BaseModel):
+class SymbolInput(BaseModel):
     genome: str | UploadFile
     symbol: str
 
@@ -179,20 +180,19 @@ async def get_image(request: Request, fname: str, bg: BackgroundTasks):
 
 
 @app.post("/skew")
-async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
-    genome = input.genome
+async def skew_page(request: Request, input: Annotated[GenomeInput, Form()]):
+    genome = input.pattern
     if not isinstance(genome, str):
         genome = (await genome.read()).decode()
         genome = ensure_genome(genome)
 
-    symbol_array = GenomeVisualizer.FasterSymbolArray(genome, input.symbol)
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
     # TODO: genome label from filename?
     label = ""
-    if not isinstance(input.genome, str):
-        label, _ = os.path.splitext(input.genome.filename)
+    if not isinstance(input.pattern, str):
+        label, _ = os.path.splitext(input.pattern.filename)
     fig: Figure = GenomeVisualizer.visualization.plot_skew_array_with_ori_impl(
         skew_array, min_skew, genome_label=label
     )
@@ -201,6 +201,28 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     ) as f:
         skew_array_img = f.name
         fig.savefig(f, format="png")
+
+    return templates.TemplateResponse(
+        "skew_result.html",
+        {
+            "request": request,
+            "skew_array_img": skew_array_img,
+        },
+    )
+
+
+@app.post("/symbol")
+async def symbol_page(request: Request, input: Annotated[SymbolInput, Form()]):
+    genome = input.genome
+    if not isinstance(genome, str):
+        genome = (await genome.read()).decode()
+        genome = ensure_genome(genome)
+
+    symbol_array = GenomeVisualizer.FasterSymbolArray(genome, input.symbol)
+
+    label = ""
+    if not isinstance(input.genome, str):
+        label, _ = os.path.splitext(input.genome.filename)
 
     fig: Figure = GenomeVisualizer.visualization.plot_symbol_array_impl(
         symbol_array, input.symbol, genome_label=label
@@ -212,10 +234,9 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
         fig.savefig(f, format="png")
 
     return templates.TemplateResponse(
-        "skew_result.html",
+        "symbol_result.html",
         {
             "request": request,
             "symbol_array_img": symbol_array_img,
-            "skew_array_img": skew_array_img,
         },
     )

@@ -1,0 +1,13 @@
+<h1>Symbol</h1>
+<form hx-trigger="change,submit" hx-post="/symbol" hx-swap="innerHMTL" hx-target="#feature-result"
+    enctype="multipart/form-data">
+    {% with label="Genome", name="genome" %}
+    {% include 'genome_input.html' %}
+    {% endwith %}
+    <select name="symbol">
+        <option>A</option>
+        <option>T</option>
+        <option>C</option>
+        <option>G</option>
+    </select>
+</form>
