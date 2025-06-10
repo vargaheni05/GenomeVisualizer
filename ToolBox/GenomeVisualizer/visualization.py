@@ -36,6 +36,34 @@ def plot_symbol_array(symbol_array: dict[int, int], symbol: str, genome_label: s
     plt.tight_layout()
     plt.show()
 
+def plot_skew_array_with_ori_impl(skew: list[int], ori_positions: list[int], genome_label: str = "genome") -> plt.Figure:
+    """
+    Plots the skew array and highlights the estimated origin(s) of replication.
+
+    Args:
+        skew (list[int]): Skew values computed across the genome.
+        ori_positions (list[int]): Positions where the skew reaches its minimum (possible ori sites).
+        genome_label (str, optional): Name of the genome to show in the title. Default is "genome".
+
+    Returns:
+        None: The function displays the plot using matplotlib.
+
+    Example:
+        >>> skew = SkewArray(genome)
+        >>> ori_pos = MinimumSkew(genome)
+        >>> plot_skew_array_with_ori(skew, ori_pos, genome_label="E. coli")
+    """
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(range(len(skew)), skew, label="Skew", color="darkgreen")
+    plt.scatter(ori_positions, [skew[pos] for pos in ori_positions], color="red", label="Minimum skew (ori?)")
+    plt.xlabel("Genome position")
+    plt.ylabel("Skew (G - C)")
+    plt.title(f"Skew array for {genome_label}")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    return fig
+
 def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_label: str = "genome") -> None:
     """
     Plots the skew array and highlights the estimated origin(s) of replication.
@@ -53,16 +81,8 @@ def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_l
         >>> ori_pos = MinimumSkew(genome)
         >>> plot_skew_array_with_ori(skew, ori_pos, genome_label="E. coli")
     """
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(len(skew)), skew, label="Skew", color="darkgreen")
-    plt.scatter(ori_positions, [skew[pos] for pos in ori_positions], color="red", label="Minimum skew (ori?)")
-    plt.xlabel("Genome position")
-    plt.ylabel("Skew (G - C)")
-    plt.title(f"Skew array for {genome_label}")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
+    fig=plot_skew_array_with_ori_impl(skew, ori_positions,  "genome")
+    fig.show()
 
 def plot_motiflogo(motifs: list[str]) -> None:
     """
