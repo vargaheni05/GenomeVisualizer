@@ -1,15 +1,14 @@
 import io
+import os
 import json
 import logging
-from optparse import Option
-import string
 import pathlib
-from typing import Annotated, Any
+import tempfile
+from typing import Annotated
 from fastapi import (
     BackgroundTasks,
     FastAPI,
     Form,
-    HTTPException,
     Request,
     Response,
     UploadFile,
@@ -110,13 +109,6 @@ def make_image_response(figure: Figure, bg: BackgroundTasks, fname="out.png"):
     )
 
 
-@app.get("/test-image")
-def image_response_test(bg: BackgroundTasks):
-    fig = plt.figure()
-    plt.plot([1, 2, 3], [1, 5, 2])
-    return make_image_response(fig, bg)
-
-
 class ReverseComplementInput(BaseModel):
     pattern: str | UploadFile
 
@@ -175,6 +167,17 @@ def ensure_genome(v) -> str:
     return v
 
 
+@app.get("/img")
+async def get_image(request: Request, fname: str, bg: BackgroundTasks):
+    img_buf = open(fname, "rb")
+    bg.add_task(img_buf.close)
+    return Response(
+        img_buf.read(),
+        headers={"Content-Disposition": f'inline; filename="{fname}"'},
+        media_type="image/png",
+    )
+
+
 @app.post("/skew")
 async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     genome = input.genome
@@ -186,12 +189,33 @@ async def skew_page(request: Request, input: Annotated[SkewInput, Form()]):
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
+    # TODO: genome label from filename?
+    label = ""
+    if not isinstance(input.genome, str):
+        label, _ = os.path.splitext(input.genome.filename)
+    fig: Figure = GenomeVisualizer.visualization.plot_skew_array_with_ori_impl(
+        skew_array, min_skew, genome_label=label
+    )
+    with tempfile.NamedTemporaryFile(
+        suffix=".png", delete=False, delete_on_close=False
+    ) as f:
+        skew_array_img = f.name
+        fig.savefig(f, format="png")
+
+    fig: Figure = GenomeVisualizer.visualization.plot_symbol_array_impl(
+        symbol_array, input.symbol, genome_label=label
+    )
+    with tempfile.NamedTemporaryFile(
+        suffix=".png", delete=False, delete_on_close=False
+    ) as f:
+        symbol_array_img = f.name
+        fig.savefig(f, format="png")
+
     return templates.TemplateResponse(
         "skew_result.html",
         {
             "request": request,
-            "symbol_array": json.dumps(symbol_array, indent=4),
-            "skew_array": json.dumps(skew_array, indent=4),
-            "min_skew": json.dumps(min_skew, indent=4),
+            "symbol_array_img": symbol_array_img,
+            "skew_array_img": skew_array_img,
         },
     )

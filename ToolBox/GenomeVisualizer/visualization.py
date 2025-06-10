@@ -4,6 +4,20 @@ import matplotlib.pyplot as plt
 import logomaker
 from GenomeVisualizer.motifs import Profile
 
+def plot_symbol_array_impl(symbol_array: dict[int, int], symbol: str, genome_label: str = "genome") -> plt.Figure:
+    """See plot_symbol_array"""
+    positions = list(symbol_array.keys())
+    counts = list(symbol_array.values())
+
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(positions, counts, color="blue")
+    plt.xlabel("genome position")
+    plt.ylabel(f"count of {symbol} in half-genome starting at given position")
+    plt.title(f"Symbol array for {genome_label} (symbol = '{symbol}')")
+    plt.grid(True)
+    plt.tight_layout()
+    return fig
+
 def plot_symbol_array(symbol_array: dict[int, int], symbol: str, genome_label: str = "genome") -> None:
     """
     Plots the symbol frequency array across the genome.
@@ -24,17 +38,36 @@ def plot_symbol_array(symbol_array: dict[int, int], symbol: str, genome_label: s
         >>> arr = FasterSymbolArray(genome, 'C')
         >>> plot_symbol_array(arr, 'C', genome_label="E. coli")
     """
-    positions = list(symbol_array.keys())
-    counts = list(symbol_array.values())
+    plot_symbol_array_impl(symbol_array, symbol, genome_label)
+    plt.show()
 
-    plt.figure(figsize=(10, 5))
-    plt.plot(positions, counts, color="blue")
-    plt.xlabel("genome position")
-    plt.ylabel(f"count of {symbol} in half-genome starting at given position")
-    plt.title(f"Symbol array for {genome_label} (symbol = '{symbol}')")
+def plot_skew_array_with_ori_impl(skew: list[int], ori_positions: list[int], genome_label: str = "genome") -> plt.Figure:
+    """
+    Plots the skew array and highlights the estimated origin(s) of replication.
+
+    Args:
+        skew (list[int]): Skew values computed across the genome.
+        ori_positions (list[int]): Positions where the skew reaches its minimum (possible ori sites).
+        genome_label (str, optional): Name of the genome to show in the title. Default is "genome".
+
+    Returns:
+        None: The function displays the plot using matplotlib.
+
+    Example:
+        >>> skew = SkewArray(genome)
+        >>> ori_pos = MinimumSkew(genome)
+        >>> plot_skew_array_with_ori(skew, ori_pos, genome_label="E. coli")
+    """
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(range(len(skew)), skew, label="Skew", color="darkgreen")
+    plt.scatter(ori_positions, [skew[pos] for pos in ori_positions], color="red", label="Minimum skew (ori?)")
+    plt.xlabel("Genome position")
+    plt.ylabel("Skew (G - C)")
+    plt.title(f"Skew array for {genome_label}")
+    plt.legend()
     plt.grid(True)
     plt.tight_layout()
-    plt.show()
+    return fig
 
 def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_label: str = "genome") -> None:
     """
@@ -53,16 +86,8 @@ def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_l
         >>> ori_pos = MinimumSkew(genome)
         >>> plot_skew_array_with_ori(skew, ori_pos, genome_label="E. coli")
     """
-    plt.figure(figsize=(10, 5))
-    plt.plot(range(len(skew)), skew, label="Skew", color="darkgreen")
-    plt.scatter(ori_positions, [skew[pos] for pos in ori_positions], color="red", label="Minimum skew (ori?)")
-    plt.xlabel("Genome position")
-    plt.ylabel("Skew (G - C)")
-    plt.title(f"Skew array for {genome_label}")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
+    fig=plot_skew_array_with_ori_impl(skew, ori_positions,  "genome")
+    fig.show()
 
 def plot_motiflogo(motifs: list[str]) -> None:
     """
