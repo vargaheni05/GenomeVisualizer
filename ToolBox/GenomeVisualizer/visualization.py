@@ -131,7 +131,7 @@ def plot_motiflogo(motifs: list[str]) -> None:
 
     # Plot motif logo
     plt.figure(figsize=(1 + k * 0.4, 2.5))
-    logo = logomaker.Logo(df, color_scheme='classic', font_name='Arial Rounded MT Bold')
+    logo = logomaker.Logo(df, color_scheme='classic', font_name='BitstromWera Nerd Font')
     logo.style_spines(visible=False)
     logo.style_spines(spines=['left', 'bottom'], visible=True)
     logo.ax.set_xlabel('Position', fontsize=14)

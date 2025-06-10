@@ -246,7 +246,7 @@ def GreedyMotifSearch(Dna: list[str], k: int, t: int) -> list[str]:
 
 def CountWithPseudocounts(Motifs: list[str]) -> dict[str, list[int]]:
     """
-    Computes the count matrix of motifs with pseudocounts (Laplace’s Rule of Succession).
+    Computes the count matrix of motifs with pseudocounts (Laplace's Rule of Succession).
 
     This function is a modified version of `Count()`, where each position in the count 
     matrix is initialized with 1 instead of 0. This prevents zero values in subsequent 
@@ -254,27 +254,52 @@ def CountWithPseudocounts(Motifs: list[str]) -> dict[str, list[int]]:
     assigning zero probability to unseen symbols.
 
     Args:
-        Motifs (list[str]): AA list of DNA strings (motifs) of equal length.
+        Motifs (list[str]): A list of DNA strings (motifs) of equal length.
 
     Returns:
         dict[str, list[int]]: A dictionary mapping each nucleotide ('A', 'C', 'G', 'T') 
         to a list of integer counts per position, each initialized with 1 (pseudocount).
 
     Example:
-        >>> CountWithPseudocounts(["ATG", "ACG", "AAG", "AGG", "ATG"])
+        >>> motifs = ["AACGTA", "CCCGTT", "CACCTT", "GGATTA", "TTCCGG"]
+        >>> CountWithPseudocounts(motifs)
         {
-            'A': [6, 1, 1],
-            'C': [1, 2, 1],
-            'G': [1, 1, 6],
-            'T': [1, 5, 1]
+            'A': [2, 3, 2, 1, 1, 3],
+            'C': [3, 2, 5, 3, 1, 1],
+            'G': [2, 2, 1, 3, 2, 2],
+            'T': [2, 2, 1, 2, 5, 3]
         }
-
-    Notes:
-        - This function adds 1 pseudocount to each nucleotide in every column (Laplace smoothing).
-        - Useful when constructing profile matrices to avoid zero probabilities.
     """
 
-def ProfileWithPseudocounts(Motifs):
+def ProfileWithPseudocounts(Motifs: list[str]) -> dict[str, list[float]]:
+    """
+    Computes the nucleotide profile matrix for a list of motifs using pseudocounts.
+
+    Unlike the basic profile computation, this version adds 1 to each nucleotide count 
+    before normalization, preventing zero probabilities and improving the robustness 
+    of the profile in greedy or probabilistic motif search algorithms.
+
+    Args:
+        Motifs (list[str]): A list of DNA strings (motifs) of equal length.
+
+    Returns:
+        dict[str, list[float]]: A dictionary mapping each nucleotide ('A', 'C', 'G', 'T') 
+        to a list of probabilities for each position.
+
+    Notes:
+        - This function avoids zero-probability pitfalls in probabilistic models.
+        - Normalization uses (t + 4) to account for the pseudocounts.
+
+    Example:
+        >>> motifs = ["AACGTA", "CCCGTT", "CACCTT", "GGATTA", "TTCCGG"]
+        >>> ProfileWithPseudocounts(motifs)
+        {
+            'A': [0.222, 0.333, 0.222, 0.111, 0.111, 0.333],
+            'C': [0.333, 0.222, 0.556, 0.333, 0.111, 0.111],
+            'G': [0.222, 0.222, 0.111, 0.333, 0.222, 0.222],
+            'T': [0.222, 0.222, 0.111, 0.222, 0.556, 0.333]
+        }
+    """
     t = len(Motifs)
     k = len(Motifs[0])
     profile = {}
@@ -284,7 +309,33 @@ def ProfileWithPseudocounts(Motifs):
             profile[i][j]/=(t+4)
     return profile
 
-def GreedyMotifSearchWithPseudocounts(Dna, k, t):
+def GreedyMotifSearchWithPseudocounts(Dna: list[str], k: int, t: int) -> list[str]:
+    """
+    Executes the greedy motif search algorithm using a pseudocount-corrected profile matrix.
+
+    This enhanced version of GreedyMotifSearch prevents zero probabilities in profile matrices 
+    by applying Laplace correction (pseudocounts). It initializes with the first k-mer from each 
+    string, then explores all possible k-mers in the first DNA string, building a motif matrix 
+    by iteratively adding the profile-most probable k-mer from the remaining strings.
+
+    Args:
+        Dna (list[str]): A list of DNA strings (motifs) of equal length.
+        k (int): Length of the motif to identify.
+        t (int): Number of DNA strings in the input list.
+
+    Returns:
+        list[str]: A list of `t` k-mers (one from each string) representing the highest scoring motifs.
+
+    Notes:
+        - Profile construction uses `ProfileWithPseudocounts()` to avoid zero-probability values.
+        - This version is more stable for motif detection than the zero-pseudocount version.
+        - In case of ties in most probable k-mer selection, the first occurrence is returned.
+
+    Example:
+        >>> Dna = ["GGCGTTCAGGCA", "AAGAATCAGTCA", "CAAGGAGTTCGC", "CACGTCAATCAC", "CAATAATATTCG"]
+        >>> GreedyMotifSearchWithPseudocounts(Dna, 3, 5)
+        ['TTC', 'ATC', 'TTC', 'ATC', 'TTC']
+    """
     BestMotifs = []
     for i in range(0, t):
         BestMotifs.append(Dna[i][0:k])
