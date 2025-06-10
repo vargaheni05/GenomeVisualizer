@@ -45,6 +45,12 @@ Python >= 3.10
 
 matplotlib >= 3.9.2
 
+numpy>=1.25.2
+
+pandas>=2.2.2
+
+logomaker>=0.8
+
 All the python requirements are installed when the toolbox is installed, so there is no need for any additional commands.
 
 Documentation

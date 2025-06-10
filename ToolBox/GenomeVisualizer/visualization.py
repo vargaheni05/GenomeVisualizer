@@ -1,4 +1,8 @@
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
+import logomaker
+from GenomeVisualizer.motifs import Profile
 
 def plot_symbol_array(symbol_array: dict[int, int], symbol: str, genome_label: str = "genome") -> None:
     """
@@ -57,5 +61,56 @@ def plot_skew_array_with_ori(skew: list[int], ori_positions: list[int], genome_l
     plt.title(f"Skew array for {genome_label}")
     plt.legend()
     plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+def plot_motiflogo(motifs: list[str]) -> None:
+    """
+    Plots a motif logo based on information content using Shannon entropy.
+
+    This function generates a sequence logo from a list of motifs, where each letter's 
+    height is proportional to its information content in bits. Highly conserved positions 
+    produce taller symbols.
+
+    Args:
+        motifs (list[str]): A list of DNA strings (motifs) of equal length.
+
+    Returns:
+        None: Displays a motif logo plot using matplotlib.
+
+    Example:
+        >>> plot_motiflogo(["ATG", "ACG", "AAG", "AGG", "ATG"])
+    """
+    profile = Profile(motifs)
+    k = len(motifs[0])
+
+    # Compute entropy and information content
+    entropy = []
+    for i in range(k):
+        H = 0
+        for nt in "ACGT":
+            p = profile[nt][i]
+            if p > 0:
+                H -= p * np.log2(p)
+        entropy.append(H)
+
+    info_content = [2 - h for h in entropy]
+
+    # Construct bit matrix
+    bit_matrix = {nt: [] for nt in "ACGT"}
+    for nt in "ACGT":
+        for i in range(k):
+            bit_matrix[nt].append(profile[nt][i] * info_content[i])
+
+    df = pd.DataFrame(bit_matrix)
+
+    # Plot motif logo
+    plt.figure(figsize=(1 + k * 0.4, 2.5))
+    logo = logomaker.Logo(df, color_scheme='classic', font_name='Arial Rounded MT Bold')
+    logo.style_spines(visible=False)
+    logo.style_spines(spines=['left', 'bottom'], visible=True)
+    logo.ax.set_xlabel('Position', fontsize=14)
+    logo.ax.set_ylabel('Bits', fontsize=14)
+    logo.ax.set_title("Motif Logo", fontsize=16)
     plt.tight_layout()
     plt.show()

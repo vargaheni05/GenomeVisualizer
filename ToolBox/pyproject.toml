@@ -22,7 +22,10 @@ classifiers = [
 "Topic :: Scientific/Engineering"
 ]
 dependencies = [
-"matplotlib>=3.9.2"
+    "matplotlib>=3.9.2",
+    "numpy>=1.25.2",
+    "pandas>=2.2.2",
+    "logomaker>=0.8"
 ]
 [project.urls]
 Homepage = "https://github.com/vargaheni05/GenomeVisualizer"
