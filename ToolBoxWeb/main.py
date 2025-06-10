@@ -189,7 +189,6 @@ async def skew_page(request: Request, input: Annotated[GenomeInput, Form()]):
     skew_array = GenomeVisualizer.SkewArray(genome)
     min_skew = GenomeVisualizer.basic.MinPositions(skew_array)
 
-    # TODO: genome label from filename?
     label = ""
     if not isinstance(input.pattern, str):
         label, _ = os.path.splitext(input.pattern.filename)
